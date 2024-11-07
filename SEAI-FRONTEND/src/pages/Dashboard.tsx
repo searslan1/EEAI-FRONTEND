@@ -1,45 +1,20 @@
 import { useState } from 'react';
-import { Bell, ChevronDown, Search, User } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { Button } from "../components/ui/button";
+import Header from "../components/Header"; // Yeni Header bileşeni import ediliyor
 
 export default function Dashboard() {
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  // Kategori verisi
   const categories = [
     { title: "Trending Interviews", items: ["Tech CEO", "Startup Founder", "AI Researcher"] },
     { title: "Top in Technology", items: ["Software Engineer", "Data Scientist", "Product Manager"] },
     { title: "Business Leaders", items: ["Fortune 500 CEO", "Venture Capitalist", "Marketing Guru"] }
   ];
 
-  // Scroll event
-  if (typeof window !== 'undefined') {
-    window.onscroll = () => {
-      setIsScrolled(window.pageYOffset === 0 ? false : true);
-      return () => (window.onscroll = null);
-    }
-  }
-
   return (
     <div className="relative h-screen bg-gradient-to-br from-blue-200 via-purple-200 to-blue-300 lg:h-[140vh] text-gray-800">
       {/* Header */}
-      <header className={`${isScrolled ? 'bg-blue-300/70 backdrop-blur-sm' : ''} fixed top-0 z-50 flex w-full items-center justify-between px-4 py-4 transition-all lg:px-10 lg:py-6`}>
-        <div className="flex items-center space-x-2 md:space-x-10">
-          <img src="/placeholder.svg" alt="InterviewFlix" className="cursor-pointer object-contain" />
-          <ul className="hidden space-x-4 md:flex">
-            <li className="headerLink">Home</li>
-            <li className="headerLink">Categories</li>
-            <li className="headerLink">My List</li>
-            <li className="headerLink">New & Popular</li>
-          </ul>
-        </div>
-        <div className="flex items-center space-x-4 text-sm font-light">
-          <Search className="hidden h-6 w-6 sm:inline" />
-          <p className="hidden lg:inline">Interviewer</p>
-          <Bell className="h-6 w-6" />
-          <User className="h-6 w-6" />
-        </div>
-      </header>
+      <Header />
+
       {/* Main Content */}
       <main className="relative pl-4 pb-24 lg:space-y-24 lg:pl-16">
         <div className="flex flex-col space-y-2 py-16 md:space-y-4 lg:h-[65vh] lg:justify-end lg:pb-12">
@@ -82,5 +57,5 @@ export default function Dashboard() {
         </section>
       </main>
     </div>
-  )
+  );
 }
