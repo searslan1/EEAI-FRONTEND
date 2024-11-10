@@ -1,144 +1,68 @@
-import { useState } from 'react';
-import { Plus, Search, Trash2, User } from 'lucide-react';
-import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input";
-import { Label } from "../components/ui/label";
-import { Textarea } from "../components/ui/textarea";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../components/ui/dialog";
-import Header from "../components/Header"; // Header bileşenini import ettik
-
-type Interview = {
-  id: string;
-  title: string;
-  description: string;
-  date: string;
-  interviewer: string;
-};
+import { useState, useEffect } from 'react';
+import Header from '../components/Header';
+import InterviewList from '../components/InterviewList';
+import CreateInterviewDialog from '../components/CreateInterviewDialog';
+import { Interview } from '../types';
 
 export default function InterviewManagement() {
-  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false); // Create Dialog kontrolü
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false); // Edit Dialog kontrolü
+  const [isScrolled, setIsScrolled] = useState(false);
   const [interviews, setInterviews] = useState<Interview[]>([
-    { id: '1', title: 'Tech CEO Interview', description: 'Interview with a prominent tech CEO', date: '2023-06-15', interviewer: 'John Doe' },
-    { id: '2', title: 'Startup Founder Chat', description: 'Discussion with a successful startup founder', date: '2023-06-20', interviewer: 'Jane Smith' },
+    {
+      id: '1',
+      title: 'Senior Developer Interview',
+      description: 'Interview for the senior developer position',
+      startDate: '2023-06-15',
+      endDate: '2023-06-20',
+      reviewer: 'John Doe',
+      questions: [
+        { id: '1', content: 'Describe a challenging project you\'ve worked on.', difficulty: 'Hard', timeLimit: 10, aiGenerated: false, tags: [], creator: '' },
+        { id: '2', content: 'What is your approach to problem-solving?', difficulty: 'Medium', timeLimit: 5, aiGenerated: false, tags: [], creator: '' },
+      ],
+      totalDuration: 15,
+    },
   ]);
-  const [newInterview, setNewInterview] = useState<Omit<Interview, 'id'>>({ title: '', description: '', date: '', interviewer: '' });
-  const [editingInterview, setEditingInterview] = useState<Interview | null>(null);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
-  const handleCreateInterview = () => {
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const handleCreateInterview = (newInterview: Omit<Interview, 'id'>) => {
     const id = Math.random().toString(36).substr(2, 9);
     setInterviews([...interviews, { ...newInterview, id }]);
-    setNewInterview({ title: '', description: '', date: '', interviewer: '' });
-    setIsCreateDialogOpen(false); // Create Dialog'ı kapat
+    setIsCreateModalOpen(false);
   };
 
   const handleDeleteInterview = (id: string) => {
     setInterviews(interviews.filter(interview => interview.id !== id));
   };
 
-  const handleUpdateInterview = () => {
-    if (editingInterview) {
-      setInterviews(interviews.map(interview => 
-        interview.id === editingInterview.id ? editingInterview : interview
-      ));
-      setEditingInterview(null);
-      setIsEditDialogOpen(false); // Edit Dialog'ı kapat
-    }
-  };
-
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-blue-200 via-purple-200 to-blue-300 text-gray-800">
-      {/* Header Bileşeni */}
-      <Header />
-
+    <div className="relative min-h-screen bg-gradient-to-br from-blue-100 via-purple-100 to-blue-200 text-gray-800">
+      <Header isScrolled={isScrolled} />
       <main className="relative px-4 pb-24 pt-32 lg:px-16">
-        <h1 className="text-4xl font-bold mb-8">Interview Management</h1>
-
-        <Button className="mb-6" onClick={() => setIsCreateDialogOpen(true)}>
-          <Plus className="mr-2 h-4 w-4" /> Create New Interview
-        </Button>
-
-        {/* Create Interview Dialog */}
-        {isCreateDialogOpen && (
-          <Dialog>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Create New Interview</DialogTitle>
-              </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="title" className="text-right">Title</Label>
-                  <Input id="title" className="col-span-3" value={newInterview.title} onChange={(e) => setNewInterview({...newInterview, title: e.target.value})} />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="description" className="text-right">Description</Label>
-                  <Textarea id="description" className="col-span-3" value={newInterview.description} onChange={(e) => setNewInterview({...newInterview, description: e.target.value})} />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="date" className="text-right">Date</Label>
-                  <Input id="date" type="date" className="col-span-3" value={newInterview.date} onChange={(e) => setNewInterview({...newInterview, date: e.target.value})} />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="interviewer" className="text-right">Interviewer</Label>
-                  <Input id="interviewer" className="col-span-3" value={newInterview.interviewer} onChange={(e) => setNewInterview({...newInterview, interviewer: e.target.value})} />
-                </div>
-              </div>
-              <Button onClick={handleCreateInterview}>Create Interview</Button>
-            </DialogContent>
-          </Dialog>
-        )}
-
-        <div className="space-y-6">
-          {interviews.map((interview) => (
-            <div key={interview.id} className="bg-white p-6 rounded-lg shadow-md">
-              <h2 className="text-2xl font-semibold mb-2">{interview.title}</h2>
-              <p className="text-gray-600 mb-4">{interview.description}</p>
-              <div className="flex justify-between items-center">
-                <div>
-                  <p><strong>Date:</strong> {interview.date}</p>
-                  <p><strong>Interviewer:</strong> {interview.interviewer}</p>
-                </div>
-                <div className="space-x-2">
-                  <Button variant="outline" onClick={() => { setEditingInterview(interview); setIsEditDialogOpen(true); }}>Edit</Button>
-
-                  {/* Edit Interview Dialog */}
-                  {isEditDialogOpen && (
-                    <Dialog>
-                      <DialogContent>
-                        <DialogHeader>
-                          <DialogTitle>Edit Interview</DialogTitle>
-                        </DialogHeader>
-                        <div className="grid gap-4 py-4">
-                          <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="edit-title" className="text-right">Title</Label>
-                            <Input id="edit-title" className="col-span-3" value={editingInterview?.title || ''} onChange={(e) => setEditingInterview({...editingInterview!, title: e.target.value})} />
-                          </div>
-                          <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="edit-description" className="text-right">Description</Label>
-                            <Textarea id="edit-description" className="col-span-3" value={editingInterview?.description || ''} onChange={(e) => setEditingInterview({...editingInterview!, description: e.target.value})} />
-                          </div>
-                          <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="edit-date" className="text-right">Date</Label>
-                            <Input id="edit-date" type="date" className="col-span-3" value={editingInterview?.date || ''} onChange={(e) => setEditingInterview({...editingInterview!, date: e.target.value})} />
-                          </div>
-                          <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="edit-interviewer" className="text-right">Interviewer</Label>
-                            <Input id="edit-interviewer" className="col-span-3" value={editingInterview?.interviewer || ''} onChange={(e) => setEditingInterview({...editingInterview!, interviewer: e.target.value})} />
-                          </div>
-                        </div>
-                        <Button onClick={handleUpdateInterview}>Update Interview</Button>
-                      </DialogContent>
-                    </Dialog>
-                  )}
-                  <Button variant="destructive" onClick={() => handleDeleteInterview(interview.id)}>
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            </div>
-          ))}
+        <div className="max-w-7xl mx-auto">
+          <div className="flex justify-between items-center mb-8">
+            <h1 className="text-4xl font-bold">Interview Management</h1>
+            <button onClick={() => setIsCreateModalOpen(true)} className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600">
+              Create New Interview
+            </button>
+          </div>
+          <InterviewList
+            interviews={interviews}
+            onDeleteInterview={handleDeleteInterview}
+          />
         </div>
       </main>
+      <CreateInterviewDialog
+        isOpen={isCreateModalOpen}
+        onOpenChange={setIsCreateModalOpen}
+        onCreateInterview={handleCreateInterview}
+      />
     </div>
   );
 }

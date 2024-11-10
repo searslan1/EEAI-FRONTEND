@@ -1,0 +1,37 @@
+
+.mainContainer {
+    min-height: 100vh;
+    background: linear-gradient(to bottom right, #b0c4ff, #b993d6, #b0c4ff);
+    color: #111;
+
+  }
+  
+  .headerTitle {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+  }
+  
+  .dialogContent {
+    max-width: 700px;
+    padding: 1rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+}
+  
+  .questionList {
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  
+  .questionItem {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    padding: 0.5rem;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.6); /* Hafif bir beyaz arka plan ile daha görünür hale getirme */
+}
+
+  

@@ -1,21 +1,21 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 
 interface ButtonProps {
-  children: ReactNode;
+  children: React.ReactNode;
   onClick?: () => void;
   variant?: 'outline' | 'destructive';
+  size?: 'sm' | 'md' | 'lg';
+  disabled?: boolean;
   className?: string;
 }
 
-export const Button: React.FC<ButtonProps> = ({ children, onClick, variant, className = '' }) => {
-  const variantClass =
-    variant === 'outline' ? 'border border-gray-300 text-gray-700' : 
-    variant === 'destructive' ? 'bg-red-600 text-white' : 'bg-blue-500 text-white';
+export const Button: React.FC<ButtonProps> = ({ children, onClick, variant, size, disabled }) => {
+  const baseStyle = 'px-4 py-2 rounded';
+  const variantStyle = variant === 'destructive' ? 'bg-red-500 text-white' : 'border border-gray-300';
+  const sizeStyle = size === 'sm' ? 'text-sm' : size === 'lg' ? 'text-lg' : 'text-md';
+
   return (
-    <button
-      onClick={onClick}
-      className={`px-4 py-2 font-semibold rounded ${variantClass} ${className}`}
-    >
+    <button onClick={onClick} className={`${baseStyle} ${variantStyle} ${sizeStyle}`} disabled={disabled}>
       {children}
     </button>
   );
