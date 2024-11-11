@@ -6,15 +6,14 @@ import HeroSection from '../components/HeroSection';
 import CategorySection from '../components/CategorySection';
 import InterviewApplications from '../components/InterviewApplications';
 import Footer from '../components/Footer';
+import Chatbot from '../components/Chatbot';
 import { hrData, dailyApplications, categories, applications } from '../data/mockData';
 
 export default function Dashboard() {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 0);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 0);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -28,6 +27,7 @@ export default function Dashboard() {
         <InterviewApplications applications={applications} />
       </main>
       <Footer />
+      <Chatbot /> {/* Keeps Chatbot fixed on the screen */}
     </div>
   );
 }

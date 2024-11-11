@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import InterviewList from '../components/InterviewList';
 import CreateInterviewDialog from '../components/CreateInterviewDialog';
+import Chatbot from '../components/Chatbot';
 import { Interview } from '../types';
+import { Button } from '../components/ui/button';
 
 export default function InterviewManagement() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -24,9 +26,7 @@ export default function InterviewManagement() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 0);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 0);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -48,9 +48,9 @@ export default function InterviewManagement() {
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-between items-center mb-8">
             <h1 className="text-4xl font-bold">Interview Management</h1>
-            <button onClick={() => setIsCreateModalOpen(true)} className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600">
+            <Button variant="default" onClick={() => setIsCreateModalOpen(true)}>
               Create New Interview
-            </button>
+            </Button>
           </div>
           <InterviewList
             interviews={interviews}
@@ -58,11 +58,16 @@ export default function InterviewManagement() {
           />
         </div>
       </main>
-      <CreateInterviewDialog
-        isOpen={isCreateModalOpen}
-        onOpenChange={setIsCreateModalOpen}
-        onCreateInterview={handleCreateInterview}
-      />
+
+      {isCreateModalOpen && (
+        <CreateInterviewDialog
+          isOpen={isCreateModalOpen}
+          onOpenChange={setIsCreateModalOpen}
+          onCreateInterview={handleCreateInterview}
+        />
+      )}
+
+      <Chatbot /> {/* Adds Chatbot to Interview Management */}
     </div>
   );
 }

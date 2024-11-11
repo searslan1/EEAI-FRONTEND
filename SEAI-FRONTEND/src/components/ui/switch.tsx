@@ -1,28 +1,29 @@
-import React from 'react';
+"use client";
 
-interface SwitchProps {
-  id: string;
-  checked?: boolean;
-  onCheckedChange?: (checked: boolean) => void;
-  className?: string;
-}
+import * as React from "react";
+import * as SwitchPrimitives from "@radix-ui/react-switch";
+import { cn } from "../lib/utils";
 
-export const Switch: React.FC<SwitchProps> = ({ id, checked = false, onCheckedChange, className = '' }) => {
-  return (
-    <label htmlFor={id} className="inline-flex relative items-center cursor-pointer">
-      <input
-        type="checkbox"
-        id={id}
-        checked={checked}
-        onChange={(e) => onCheckedChange?.(e.target.checked)}
-        className={`sr-only peer ${className}`}
-      />
-      <div
-        className={`w-11 h-6 bg-gray-200 rounded-full peer-checked:bg-blue-600 peer-focus:ring-4 peer-focus:ring-blue-300 
-                    peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute 
-                    after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full 
-                    after:h-5 after:w-5 after:transition-all`}
-      ></div>
-    </label>
-  );
-};
+const Switch = React.forwardRef<
+  React.ElementRef<typeof SwitchPrimitives.Root>,
+  React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root>
+>(({ className, ...props }, ref) => (
+  <SwitchPrimitives.Root
+    ref={ref}
+    className={cn(
+      "peer relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ring focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=unchecked]:bg-muted",
+      className
+    )}
+    {...props}
+  >
+    <SwitchPrimitives.Thumb
+      className={cn(
+        "pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg ring-0 transition-transform duration-300 ease-in-out data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0",
+        "shadow-md hover:shadow-lg"
+      )}
+    />
+  </SwitchPrimitives.Root>
+));
+Switch.displayName = SwitchPrimitives.Root.displayName;
+
+export { Switch };

@@ -5,6 +5,7 @@ import Header from '../components/Header';
 import QuestionFilters from '../components/QuestionFilters';
 import QuestionList from '../components/QuestionList';
 import CreateQuestionDialog from '../components/CreateQuestionDialog';
+import Chatbot from '../components/Chatbot';
 import { Question } from '../types';
 
 export default function QuestionPanel() {
@@ -69,6 +70,7 @@ export default function QuestionPanel() {
           />
         </div>
       </main>
+      <Chatbot /> {/* Adds Chatbot to Question Panel */}
     </div>
   );
 }

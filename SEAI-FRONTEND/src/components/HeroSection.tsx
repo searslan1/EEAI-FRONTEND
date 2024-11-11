@@ -1,4 +1,4 @@
-import { Button } from "../components/ui/button";
+import { Button } from "../components/ui/button"; // Button'u buradan import ediyoruz
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 import { Star, Users, Briefcase, TrendingUp } from 'lucide-react';
 import { Line, LineChart, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
@@ -38,7 +38,7 @@ export default function HeroSection({ hrData, dailyApplications }: HeroSectionPr
               <Button variant="outline" size="lg">
                 Watch Now
               </Button>
-              <Button variant="destructive" size="lg">
+              <Button variant="default" size="lg">
                 More Info
               </Button>
             </div>

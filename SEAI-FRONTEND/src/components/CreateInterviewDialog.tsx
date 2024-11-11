@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Plus, Sparkles } from 'lucide-react';
-import { Button, Input, Label, Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Checkbox, ScrollArea, Switch, Tabs, TabsContent, TabsList, TabsTrigger, Badge } from "../components/ui/index";
+import { Button, Input, Label, Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Checkbox, ScrollArea, Switch, Tabs, TabsContent, TabsList, TabsTrigger, Badge } from "../components/ui/index";
 import { Interview, Question } from '../types';
 
 type CreateInterviewDialogProps = {
@@ -71,11 +71,6 @@ export default function CreateInterviewDialog({ isOpen, onOpenChange, onCreateIn
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogTrigger asChild>
-        <Button>
-          <Plus className="mr-2 h-4 w-4" /> Create New Interview
-        </Button>
-      </DialogTrigger>
       <DialogContent className="sm:max-w-[700px]">
         <DialogHeader>
           <DialogTitle>Create New Interview</DialogTitle>
@@ -159,7 +154,9 @@ export default function CreateInterviewDialog({ isOpen, onOpenChange, onCreateIn
           </TabsContent>
         </Tabs>
         <DialogFooter>
-          <Button onClick={() => onCreateInterview(newInterview)}>Create Interview</Button>
+          <Button onClick={() => onCreateInterview(newInterview)}>
+            <Plus className="mr-2 h-4 w-4" /> Create Interview
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

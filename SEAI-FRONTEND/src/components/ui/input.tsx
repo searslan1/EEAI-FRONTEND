@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cn } from "../lib/utils"; // utils dosyasına göre yolu kontrol edin
+import { cn } from "../lib/utils"; // utils dosyasının doğru yolunu kontrol edin
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   id?: string;
@@ -7,10 +7,22 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   type?: string;
   placeholder?: string;
+  className?: string; // Eksik olan className prop'u eklendi
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ id, value, onChange, type = "text", placeholder = "", className, ...props }, ref) => {
+  (
+    {
+      id,
+      value,
+      onChange,
+      type = "text",
+      placeholder = "",
+      className = "", // className için varsayılan değer eklendi
+      ...props
+    },
+    ref
+  ) => {
     return (
       <input
         id={id}

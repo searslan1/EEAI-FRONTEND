@@ -13,7 +13,7 @@ export default function Header({ isScrolled }: HeaderProps) {
         <img src="/placeholder.svg" alt="InterviewFlix" className="cursor-pointer object-contain" />
         <ul className="hidden space-x-4 md:flex">
           <li className="text-sm font-medium text-gray-700 hover:text-gray-900 transition duration-150 ease-in-out">
-            <Link to="/">Dashboard</Link>
+            <Link to="/dashboard">Dashboard</Link>
           </li>
           <li className="text-sm font-medium text-gray-700 hover:text-gray-900 transition duration-150 ease-in-out">
             <Link to="/interview-management">Interviews</Link>
