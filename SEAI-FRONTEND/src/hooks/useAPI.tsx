@@ -1,0 +1,2 @@
+//API bağlantıları ve veri çekme işlemleri için custom hook.
+//API verilerini almak için kullanılacak hook, veriyi yükler, hata mesajlarını yönetir ve veri çekme işlemleri için merkezi bir nokta sunar.

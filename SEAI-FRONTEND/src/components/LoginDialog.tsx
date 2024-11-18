@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { useAuth } from '../hooks/useAuth';
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "../components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
@@ -12,12 +14,48 @@ type LoginDialogProps = {
   onOpenChange: (open: boolean) => void;
 };
 
+type ErrorResponse = {
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+};
+
 export default function LoginDialog({ isOpen, onOpenChange }: LoginDialogProps) {
+  const auth = useAuth();
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [companyName, setCompanyName] = useState('');
   const [newEmail, setNewEmail] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+
+  const handleLogin = async () => {
+    try {
+      await auth.handleLogin(email, password);
+      onOpenChange(false);
+      navigate('/dashboard');
+    } catch (error) {
+      const axiosError = error as ErrorResponse;
+      alert(axiosError.response?.data?.message || 'Login failed');
+    }
+  };
+
+  const handleRegister = async () => {
+    try {
+      if (newPassword !== confirmPassword) {
+        alert('Passwords do not match');
+        return;
+      }
+      await auth.handleRegister(companyName, newEmail, newPassword);
+      onOpenChange(false);
+    } catch (error) {
+      const axiosError = error as ErrorResponse;
+      alert(axiosError.response?.data?.message || 'Registration failed');
+    }
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -57,13 +95,16 @@ export default function LoginDialog({ isOpen, onOpenChange }: LoginDialogProps) 
                   <Input
                     id="password"
                     type="password"
+                    placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
               </CardContent>
               <CardFooter className="flex flex-col">
-                <Button className="w-full mb-2" onClick={() => onOpenChange(false)}>Login</Button>
+                <Button className="w-full mb-2" onClick={handleLogin}>
+                  Login
+                </Button>
                 <Button variant="outline" className="w-full">
                   <Github className="mr-2 h-4 w-4" />
                   Login with GitHub
@@ -81,6 +122,16 @@ export default function LoginDialog({ isOpen, onOpenChange }: LoginDialogProps) 
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
+                  <Label htmlFor="company-name">Company Name</Label>
+                  <Input
+                    id="company-name"
+                    type="text"
+                    placeholder="Your Company"
+                    value={companyName}
+                    onChange={(e) => setCompanyName(e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
                   <Label htmlFor="new-email">Email</Label>
                   <Input
                     id="new-email"
@@ -95,6 +146,7 @@ export default function LoginDialog({ isOpen, onOpenChange }: LoginDialogProps) 
                   <Input
                     id="new-password"
                     type="password"
+                    placeholder="••••••••"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                   />
@@ -104,13 +156,16 @@ export default function LoginDialog({ isOpen, onOpenChange }: LoginDialogProps) 
                   <Input
                     id="confirm-password"
                     type="password"
+                    placeholder="••••••••"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                   />
                 </div>
               </CardContent>
               <CardFooter>
-                <Button className="w-full" onClick={() => onOpenChange(false)}>Create Account</Button>
+                <Button className="w-full" onClick={handleRegister}>
+                  Create Account
+                </Button>
               </CardFooter>
             </Card>
           </TabsContent>

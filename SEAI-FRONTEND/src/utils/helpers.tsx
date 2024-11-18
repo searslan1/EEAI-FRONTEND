@@ -1,0 +1,1 @@
+//Yardımcı fonksiyonlar ve genel utils işlevleri.
