@@ -1,5 +1,5 @@
 import axios from 'axios'; // Axios modülünü normal şekilde import ediyoruz
-import API from './apiService';
+
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 

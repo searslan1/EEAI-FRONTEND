@@ -9,7 +9,7 @@ export { Checkbox } from './checkbox';
 export { ScrollArea } from './scroll-area';
 export { Switch } from './switch';
 export { Tabs, TabsContent, TabsList, TabsTrigger } from './tabs';
-export { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './table';
+export { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../common/table';
 export { Slider } from './slider';
 export { Textarea } from './textarea';
 export { Popover } from './popover';

@@ -1,0 +1,1 @@
+//question listteki card parçalanacak
