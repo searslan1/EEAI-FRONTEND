@@ -1,4 +1,4 @@
-import { Button } from "../components/ui/button"
+import { Button } from "../../../components/common/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../../components/common/card"
 import { ScrollArea } from "../../../components/ui/scroll-area"
 import { ChevronRight } from 'lucide-react'

@@ -2,22 +2,24 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Dashboard from '../pages/Dashboard/Dashboard';
 import InterviewManagement from '../pages/InterviewManagement/InterviewManagement';
 import QuestionPanel from '../pages/QuestionManagement/QuestionPanel';
-import LoginPage from '../pages/MainPage/MainPage';
+import MainPage from '../pages/MainPage/MainPage';
 import PrivateRoute from './PrivateRoute';
-import PublicRoute from './PublicRoute'; // PublicRoute bileşeni
+import PublicRoute from './PublicRoute';
 
 function App() {
   return (
     <Router>
       <Routes>
+        {/* Giriş yapılmamış kullanıcılar ana sayfaya erişebilir */}
         <Route
           path="/"
           element={
-            <PublicRoute restricted={true}>
-              <LoginPage />
+            <PublicRoute restricted={false}>
+              <MainPage />
             </PublicRoute>
           }
         />
+        {/* Giriş yapılmış kullanıcılar özel rotalara erişebilir */}
         <Route
           path="/dashboard"
           element={

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../components/common/card";
 import { ScrollArea } from "../components/ui/scroll-area";
 import { Input } from "../components/ui/input";
-import { Button } from "../components/ui/button";
+import { Button } from "../components/common/button";
 import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
 import { Send, X } from 'lucide-react';
 import { Popover, PopoverTrigger, PopoverContent } from "../components/ui/popover";

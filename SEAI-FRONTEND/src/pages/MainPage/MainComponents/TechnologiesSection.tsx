@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "./common/card"
+import { Card, CardContent, CardHeader, CardTitle } from "../../../components/common/card"
 
 export default function TechnologiesSection() {
   const technologies = [

@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { SlidersHorizontal } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from "./common/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
-import { Slider } from "../components/ui/slider";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./common/table";
+import { Card, CardContent, CardHeader, CardTitle } from "../../../components/common/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../components/ui/select";
+import { Slider } from "../../../components/ui/slider";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../../components/common/table";
 
 type NumericKeys<T> = { [K in keyof T]: T[K] extends number ? K : never }[keyof T];
 

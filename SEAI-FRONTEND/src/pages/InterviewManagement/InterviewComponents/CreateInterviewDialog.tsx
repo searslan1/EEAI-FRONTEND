@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Plus, Sparkles } from 'lucide-react';
-import { Button, Input, Label, Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Checkbox, ScrollArea, Switch, Tabs, TabsContent, TabsList, TabsTrigger, Badge } from "../components/ui/index";
+import { Button, Input, Label, Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Checkbox, ScrollArea, Switch, Tabs, TabsContent, TabsList, TabsTrigger, Badge } from "../../../components/ui/index";
 import { Interview, Question } from '../../../types/types';
 
 type CreateInterviewDialogProps = {

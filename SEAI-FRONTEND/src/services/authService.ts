@@ -1,5 +1,4 @@
-import axios from 'axios'; // Axios modülünü normal şekilde import ediyoruz
-
+import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
@@ -16,16 +15,18 @@ export type ErrorResponse = {
   };
 };
 
+// Login Fonksiyonu
 export const login = async (email: string, password: string): Promise<AuthResponse> => {
   try {
     const response = await axios.post<AuthResponse>(`${API_URL}/admin/login`, { email, password });
-    return response.data; // token ve mesaj
+    return response.data;
   } catch (error) {
-    const axiosError = error as ErrorResponse; // Hata nesnesini manuel olarak ErrorResponse türüne çeviriyoruz
-    throw new Error(axiosError.response?.data?.message || 'Login failed');
+    handleApiError(error);
+    throw new Error('Login failed'); // Bu eklenmeli
   }
 };
 
+// Register Fonksiyonu
 export const register = async (
   companyName: string,
   email: string,
@@ -37,23 +38,37 @@ export const register = async (
       email,
       password,
     });
-    return response.data; // token ve mesaj
+    return response.data;
   } catch (error) {
-    const axiosError = error as ErrorResponse; // Hata nesnesini manuel olarak ErrorResponse türüne çeviriyoruz
-    throw new Error(axiosError.response?.data?.message || 'Registration failed');
+    handleApiError(error);
+    throw new Error('Registration failed'); // Bu eklenmeli
   }
 };
 
+// Token Yenileme Fonksiyonu
 export const refreshAccessToken = async (): Promise<{ accessToken: string }> => {
-    const response = await API.post<{ accessToken: string }>('/auth/refresh'); // Artık API doğru şekilde tanımlı
-    return response.data; // accessToken döner
-  };
+  try {
+    const response = await axios.post<{ accessToken: string }>(`${API_URL}/auth/refresh`);
+    return response.data;
+  } catch (error) {
+    handleApiError(error);
+    throw new Error('Refresh token failed'); // Bu eklenmeli
+  }
+};
 
+// Logout Fonksiyonu
 export const logout = async (): Promise<void> => {
   try {
     await axios.post(`${API_URL}/admin/logout`);
   } catch (error) {
-    const axiosError = error as ErrorResponse; // Hata nesnesini manuel olarak ErrorResponse türüne çeviriyoruz
-    throw new Error(axiosError.response?.data?.message || 'Logout failed');
+    handleApiError(error);
+    throw new Error('Logout failed'); // Bu eklenmeli
   }
+};
+
+// Hata Yönetim Fonksiyonu
+const handleApiError = (error: unknown): never => {
+  const axiosError = error as ErrorResponse;
+  const message = axiosError.response?.data?.message || 'An unexpected error occurred';
+  throw new Error(message);
 };

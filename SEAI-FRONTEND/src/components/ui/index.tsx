@@ -1,5 +1,5 @@
 // src/components/ui/index.ts
-export { Button } from './button';
+export { Button } from '../common/button';
 export { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from './dialog';
 export { Input } from './input';
 export { Label } from './label';

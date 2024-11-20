@@ -7,40 +7,73 @@ import QuestionList from './QuestionComponents/QuestionList';
 import CreateQuestionDialog from './QuestionComponents/CreateQuestionDialog';
 import Chatbot from '../../layouts/Chatbot';
 import { Question } from '../../types/types';
+import { getQuestions, createQuestion, deleteQuestion } from '../../services/questionService';
 
 export default function QuestionPanel() {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [questions, setQuestions] = useState<Question[]>([
-    { id: '1', content: 'What is your approach to problem-solving?', difficulty: 'Medium', tags: ['Problem Solving', 'Soft Skills'], creator: 'John Doe', timeLimit: 5, aiGenerated: false },
-    { id: '2', content: 'Describe a challenging project you\'ve worked on.', difficulty: 'Hard', tags: ['Experience', 'Project Management'], creator: 'Jane Smith', timeLimit: 10, aiGenerated: true },
-  ]);
+  const [isScrolled, setIsScrolled] = useState(false); // Scroll state
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
   const [filter, setFilter] = useState<string>('');
   const [difficultyFilter, setDifficultyFilter] = useState<string>('All');
   const [tagFilter, setTagFilter] = useState<string>('All');
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
+  // Fetch questions from backend
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 0);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await getQuestions();
+        const transformedQuestions = response.questions.map((q) => ({
+          ...q,
+          content: q.questionText, // Map `questionText` to `content` for frontend use
+        }));
+        setQuestions(transformedQuestions);
+      } catch (err) {
+        console.error('Error fetching questions:', err);
+        setError('Failed to fetch questions. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
-  const handleCreateQuestion = (newQuestion: Omit<Question, 'id'>) => {
-    const id = Math.random().toString(36).substr(2, 9);
-    setQuestions([...questions, { ...newQuestion, id }]);
-    setIsCreateModalOpen(false);
+  // Handle creating a new question
+  const handleCreateQuestion = async (newQuestion: Omit<Question, 'id'>) => {
+    try {
+      const createdQuestion = await createQuestion(newQuestion);
+      setQuestions([...questions, createdQuestion]);
+      setIsCreateModalOpen(false);
+    } catch (err) {
+      console.error('Error creating question:', err);
+      setError('Failed to create question. Please try again.');
+    }
   };
 
-  const handleDeleteQuestion = (id: string) => {
-    setQuestions(questions.filter((question) => question.id !== id));
+  // Handle deleting a question
+  const handleDeleteQuestion = async (id: string) => {
+    try {
+      await deleteQuestion(id);
+      setQuestions(questions.filter((question) => question.id !== id));
+    } catch (err) {
+      console.error('Error deleting question:', err);
+      setError('Failed to delete question. Please try again.');
+    }
   };
 
+  // Filter questions
   const filteredQuestions = questions.filter((question) =>
     question.content.toLowerCase().includes(filter.toLowerCase()) &&
     (difficultyFilter === 'All' || question.difficulty === difficultyFilter) &&
     (tagFilter === 'All' || question.tags.includes(tagFilter))
   );
 
+  // Collect all tags for filters
   const allTags = Array.from(new Set(questions.flatMap((q) => q.tags)));
 
   return (
@@ -49,20 +82,27 @@ export default function QuestionPanel() {
       <main className="relative px-4 pb-24 pt-32 lg:px-16">
         <div className="max-w-7xl mx-auto">
           <h1 className="text-4xl font-bold mb-8">Question Panel</h1>
-          <QuestionFilters
-            filter={filter}
-            setFilter={setFilter}
-            difficultyFilter={difficultyFilter}
-            setDifficultyFilter={setDifficultyFilter}
-            tagFilter={tagFilter}
-            setTagFilter={setTagFilter}
-            allTags={allTags}
-            setIsCreateModalOpen={setIsCreateModalOpen}
-          />
-          <QuestionList
-            questions={filteredQuestions}
-            onDeleteQuestion={handleDeleteQuestion}
-          />
+          {error && <div className="text-red-500 mb-4">{error}</div>}
+          {loading ? (
+            <div className="text-center">Loading questions...</div>
+          ) : (
+            <>
+              <QuestionFilters
+                filter={filter}
+                setFilter={setFilter}
+                difficultyFilter={difficultyFilter}
+                setDifficultyFilter={setDifficultyFilter}
+                tagFilter={tagFilter}
+                setTagFilter={setTagFilter}
+                allTags={allTags}
+                setIsCreateModalOpen={setIsCreateModalOpen}
+              />
+              <QuestionList
+                questions={filteredQuestions}
+                onDeleteQuestion={handleDeleteQuestion}
+              />
+            </>
+          )}
           <CreateQuestionDialog
             isOpen={isCreateModalOpen}
             onOpenChange={setIsCreateModalOpen}
@@ -70,7 +110,7 @@ export default function QuestionPanel() {
           />
         </div>
       </main>
-      <Chatbot /> {/* Adds Chatbot to Question Panel */}
+      <Chatbot />
     </div>
   );
 }

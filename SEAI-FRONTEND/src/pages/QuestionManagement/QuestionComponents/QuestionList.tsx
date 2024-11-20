@@ -1,5 +1,5 @@
 import { Clock, Trash2, Sparkles } from 'lucide-react';
-import { Button } from "../components/ui/button";
+import { Button } from "../../../components/common/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../../../components/common/card";
 import { Badge } from "../../../components/ui/badge";
 import { Question } from '../../../types/types';
@@ -8,7 +8,6 @@ type QuestionListProps = {
   questions: Question[];
   onDeleteQuestion: (id: string) => void;
 };
-
 export default function QuestionList({ questions, onDeleteQuestion }: QuestionListProps) {
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">

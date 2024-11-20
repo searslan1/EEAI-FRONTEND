@@ -11,47 +11,51 @@ export const useAuth = () => {
   });
 
   const handleLogin = async (email: string, password: string) => {
-    const { token, message }: AuthResponse = await login(email, password);
-    setUser({ token, companyName: message || 'Unknown' });
-    localStorage.setItem('authToken', token);
+    try {
+      const { token, message }: AuthResponse = await login(email, password);
+      setUser({ token, companyName: message || 'Unknown' });
+      localStorage.setItem('authToken', token);
+    } catch (error) {
+      console.error('Login failed:', error);
+    }
   };
 
   const handleRegister = async (companyName: string, email: string, password: string) => {
-    const { token }: AuthResponse = await register(companyName, email, password);
-    setUser({ token, companyName });
-    localStorage.setItem('authToken', token);
+    try {
+      const { token }: AuthResponse = await register(companyName, email, password);
+      setUser({ token, companyName });
+      localStorage.setItem('authToken', token);
+    } catch (error) {
+      console.error('Registration failed:', error);
+    }
   };
 
   const handleLogout = useCallback(async () => {
     try {
-      await logout(); // Backend'de oturumu sonlandır
-      setUser(null); // Frontend'de kullanıcı durumunu sıfırla
-      localStorage.removeItem('authToken'); // Token'ı temizle
+      await logout();
     } catch (error) {
-      console.error('Çıkış sırasında hata:', error);
+      console.error('Logout failed:', error);
+    } finally {
+      setUser(null);
+      localStorage.removeItem('authToken');
     }
-  }, []); // handleLogout artık sabit bir referansa sahip
+  }, []);
 
   const refreshSession = useCallback(async () => {
     try {
       const { accessToken } = await refreshAccessToken();
-      setUser((prevUser) => {
-        if (prevUser) {
-          return { ...prevUser, token: accessToken };
-        }
-        return prevUser;
-      });
+      setUser((prevUser) => (prevUser ? { ...prevUser, token: accessToken } : null));
       localStorage.setItem('authToken', accessToken);
     } catch (error) {
-      console.error('Token yenileme başarısız:', error);
-      handleLogout(); // Sabit referansa sahip handleLogout çağrılıyor
+      console.error('Token refresh failed:', error);
+      handleLogout();
     }
-  }, [handleLogout]); // handleLogout bağımlılık dizisine eklendi
+  }, [handleLogout]);
 
   useEffect(() => {
-    const interval = setInterval(refreshSession, 10 * 60 * 1000); // 10 dakikada bir yenileme
+    const interval = setInterval(refreshSession, 10 * 60 * 1000);
     return () => clearInterval(interval);
-  }, [refreshSession]); // refreshSession bağımlılık olarak eklendi
+  }, [refreshSession]);
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');

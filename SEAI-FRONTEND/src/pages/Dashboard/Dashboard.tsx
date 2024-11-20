@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Header from '../../layouts/Header';
 import HeroSection from './DashboardComponents/HeroSection';
 import CategorySection from './DashboardComponents/CategorySection';
-import InterviewApplications from '../../components/InterviewApplications';
+import InterviewApplications from './DashboardComponents/InterviewApplications';
 import Footer from '../../layouts/Footer';
 import Chatbot from '../../layouts/Chatbot';
 import { hrData, dailyApplications, categories, applications } from '../../data/mockData';
