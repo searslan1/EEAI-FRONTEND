@@ -10,8 +10,14 @@ export default function PublicRoute({ children, restricted = false }: PublicRout
   const { isAuthenticated } = useAuth();
 
   if (isAuthenticated && restricted) {
-    // Kullanıcı giriş yapmışsa ve rota kısıtlıysa dashboard'a yönlendir
-    return <Navigate to="/dashboard" replace />;
+    // Giriş yapılmış kullanıcılar için dashboard yönlendirme
+    return (
+      <Navigate
+        to="/dashboard"
+        replace
+        state={{ message: 'Zaten giriş yaptınız, dashboarda yönlendiriliyorsunuz.' }}
+      />
+    );
   }
 
   return children;

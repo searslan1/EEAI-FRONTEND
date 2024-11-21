@@ -10,7 +10,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Giriş yapılmamış kullanıcılar ana sayfaya erişebilir */}
+        {/* Genel erişime açık ana sayfa */}
         <Route
           path="/"
           element={
@@ -19,7 +19,7 @@ function App() {
             </PublicRoute>
           }
         />
-        {/* Giriş yapılmış kullanıcılar özel rotalara erişebilir */}
+        {/* Yetkilendirilmiş kullanıcılar için rotalar */}
         <Route
           path="/dashboard"
           element={
@@ -44,6 +44,8 @@ function App() {
             </PrivateRoute>
           }
         />
+        {/* 404: Bulunamayan rota */}
+        <Route path="*" element={<div>404 - Sayfa bulunamadı</div>} />
       </Routes>
     </Router>
   );

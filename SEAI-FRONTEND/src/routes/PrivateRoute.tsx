@@ -9,10 +9,16 @@ export default function PrivateRoute({ children }: PrivateRouteProps) {
   const auth = useAuth();
 
   if (!auth.isAuthenticated) {
-    // Eğer kullanıcı oturum açmamışsa, giriş sayfasına yönlendir
-    return <Navigate to="/" />;
+    // Giriş yapılmamışsa giriş sayfasına yönlendir
+    return (
+      <Navigate
+        to="/"
+        replace
+        state={{ message: 'Öncelikle giriş yapmalısınız!' }}
+      />
+    );
   }
 
-  // Eğer kullanıcı oturum açmışsa, sayfayı render et
+  // Giriş yapılmışsa bileşeni render et
   return children;
 }
